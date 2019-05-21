@@ -1,0 +1,7 @@
+{
+  "tls": {
+    "certFile": "examples/config/server-tls.crt",
+    "keyFile": "examples/config/server-tls.key"
+  },
+  "allowAnonymous": true
+}

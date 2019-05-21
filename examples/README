@@ -1,0 +1,4 @@
+This directory contains configuration data for the Sample StackRox Authorization Plugin.
+
+WARNING: The examples contain pre-generated certificates and private keys. DO NOT EVER, UNDER ANY CIRCUMSTANCES, USE
+         THESE KEYS IN AN ENVIRONMENT OTHER THAN TESTING ON YOUR LOCAL MACHINE.
