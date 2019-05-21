@@ -36,10 +36,10 @@ func Create(config *config.ServerConfig, handler http.Handler) (ServeFunc, error
 	}
 
 	server := &http.Server{
-		Addr: fmt.Sprintf("%s:%d", config.BindAddress, port),
+		Addr:      fmt.Sprintf("%s:%d", config.BindAddress, port),
 		TLSConfig: tlsConf,
-		Handler: effectiveHandler,
-		ErrorLog: log.New(os.Stderr, "http server", log.LstdFlags),
+		Handler:   effectiveHandler,
+		ErrorLog:  log.New(os.Stderr, "http server", log.LstdFlags),
 	}
 
 	if tlsConf != nil {

@@ -3,8 +3,8 @@ package main
 import (
 	"errors"
 	"flag"
-	"github.com/stackrox/sample-authz-plugin/server/config"
 	"github.com/stackrox/sample-authz-plugin/server"
+	"github.com/stackrox/sample-authz-plugin/server/config"
 	"log"
 	"net/http"
 )

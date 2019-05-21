@@ -19,10 +19,10 @@ func createTLSConfig(serverTlsConf *config.TLSConfig, authConf *config.AuthConfi
 	}
 
 	tlsConf := &tls.Config{
-		MinVersion: tls.VersionTLS12,
+		MinVersion:               tls.VersionTLS12,
 		PreferServerCipherSuites: true,
-		Certificates: []tls.Certificate{cert},
-		ClientAuth: tls.NoClientCert,
+		Certificates:             []tls.Certificate{cert},
+		ClientAuth:               tls.NoClientCert,
 	}
 
 	if authConf != nil && authConf.ClientCACertFile != "" {
