@@ -2,12 +2,14 @@ package server
 
 import (
 	"fmt"
-	"github.com/stackrox/sample-authz-plugin/server/config"
 	"log"
 	"net/http"
 	"os"
+
+	"github.com/stackrox/sample-authz-plugin/server/config"
 )
 
+// ServeFunc abstracts the `ListenAndServe()` or `ListenAndServeTLS("", "")` mechanism of an `http.Server`.
 type ServeFunc func() error
 
 // Create creates an HTTP server from the given config.
@@ -28,7 +30,7 @@ func Create(config *config.ServerConfig, handler http.Handler) (ServeFunc, error
 
 	effectiveHandler := handler
 
-	if config.Auth != nil && config.Auth.HtpasswdFile != "" {
+	if config.Auth.HtpasswdFile != "" {
 		effectiveHandler, err = createBasicAuthHandler(config.Auth.HtpasswdFile, handler)
 		if err != nil {
 			return nil, err

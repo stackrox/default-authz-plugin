@@ -4,16 +4,17 @@ import (
 	"crypto/tls"
 	"crypto/x509"
 	"fmt"
-	"github.com/stackrox/sample-authz-plugin/server/config"
 	"io/ioutil"
+
+	"github.com/stackrox/sample-authz-plugin/server/config"
 )
 
-func createTLSConfig(serverTlsConf *config.TLSConfig, authConf *config.AuthConfig) (*tls.Config, error) {
-	if serverTlsConf == nil {
+func createTLSConfig(serverTLSConf *config.TLSConfig, authConf config.AuthConfig) (*tls.Config, error) {
+	if serverTLSConf == nil {
 		return nil, nil
 	}
 
-	cert, err := tls.LoadX509KeyPair(serverTlsConf.CertFile, serverTlsConf.KeyFile)
+	cert, err := tls.LoadX509KeyPair(serverTLSConf.CertFile, serverTLSConf.KeyFile)
 	if err != nil {
 		return nil, fmt.Errorf("loading server key pair: %v", err)
 	}
@@ -25,7 +26,7 @@ func createTLSConfig(serverTlsConf *config.TLSConfig, authConf *config.AuthConfi
 		ClientAuth:               tls.NoClientCert,
 	}
 
-	if authConf != nil && authConf.ClientCACertFile != "" {
+	if authConf.ClientCACertFile != "" {
 		clientCACertsPEM, err := ioutil.ReadFile(authConf.ClientCACertFile)
 		if err != nil {
 			return nil, fmt.Errorf("reading client CA certs: %v", err)

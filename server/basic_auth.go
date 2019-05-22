@@ -2,9 +2,10 @@ package server
 
 import (
 	"fmt"
-	"github.com/tg123/go-htpasswd"
 	"log"
 	"net/http"
+
+	"github.com/tg123/go-htpasswd"
 )
 
 var (

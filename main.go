@@ -3,10 +3,11 @@ package main
 import (
 	"errors"
 	"flag"
-	"github.com/stackrox/sample-authz-plugin/server"
-	"github.com/stackrox/sample-authz-plugin/server/config"
 	"log"
 	"net/http"
+
+	"github.com/stackrox/sample-authz-plugin/server"
+	"github.com/stackrox/sample-authz-plugin/server/config"
 )
 
 var (

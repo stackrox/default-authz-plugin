@@ -3,6 +3,7 @@ package config
 import (
 	"errors"
 	"fmt"
+	"strings"
 )
 
 // ValidateServerConfig checks the given config for consistency, and returns an error if it is invalid.
@@ -19,16 +20,22 @@ func ValidateServerConfig(cfg *ServerConfig) error {
 		}
 	}
 
-	if cfg.AllowAnonymous != (cfg.Auth == nil) {
-		return errors.New("either set `allowAnonymous` to `true`, or add an `auth` configuration section")
+	var authMechanisms []string
+	if cfg.Auth.AllowAnonymous {
+		authMechanisms = append(authMechanisms, "allowAnonymous")
 	}
-	if cfg.Auth != nil {
-		if (cfg.Auth.HtpasswdFile == "") == (cfg.Auth.ClientCACertFile == "") {
-			return errors.New("auth configuration must specify either a `htpasswdFile`, or a `clientCACertFile`")
-		}
-		if cfg.Auth.ClientCACertFile != "" && cfg.TLS == nil {
+	if cfg.Auth.HtpasswdFile != "" {
+		authMechanisms = append(authMechanisms, "htpasswdFile")
+	}
+	if cfg.Auth.ClientCACertFile != "" {
+		if cfg.TLS == nil {
 			return errors.New("client certificate authentication only works with enabled TLS")
 		}
+		authMechanisms = append(authMechanisms, "clientCACertFile")
+	}
+
+	if len(authMechanisms) != 1 {
+		return fmt.Errorf("exactly one authentication mechanism must be specified, got: [%s]", strings.Join(authMechanisms, ", "))
 	}
 
 	if cfg.Port < 0 || cfg.Port > 65535 {

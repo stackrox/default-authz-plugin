@@ -1,4 +1,6 @@
 {
   "disableTLS": true,
-  "allowAnonymous": true
+  "auth": {
+    "allowAnonymous": true
+  }
 }
