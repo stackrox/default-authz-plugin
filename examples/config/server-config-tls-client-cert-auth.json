@@ -1,0 +1,9 @@
+{
+  "tls": {
+    "certFile": "examples/config/server-tls.crt",
+    "keyFile": "examples/config/server-tls.key"
+  },
+  "auth": {
+    "clientCACertFile": "examples/config/client-ca.crt"
+  }
+}

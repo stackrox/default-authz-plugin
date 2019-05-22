@@ -1,0 +1,6 @@
+{
+  "disableTLS": true,
+  "auth": {
+    "allowAnonymous": true
+  }
+}
