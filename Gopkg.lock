@@ -2,6 +2,14 @@
 
 
 [[projects]]
+  digest = "1:e3983013d82da8c49fb6776c6317d0da4b9cb926f1bb11af37f8c975889db042"
+  name = "github.com/PaesslerAG/gval"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "0ce847fc5e6163ee05ae770a441ba497fc77dcaa"
+  version = "v1.0.1"
+
+[[projects]]
   digest = "1:7dacb8ec9d0d0a25878b302cda1e8fa930cbcfa5a94259570a341def532b2191"
   name = "github.com/tg123/go-htpasswd"
   packages = ["."]
@@ -22,6 +30,9 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  input-imports = ["github.com/tg123/go-htpasswd"]
+  input-imports = [
+    "github.com/PaesslerAG/gval",
+    "github.com/tg123/go-htpasswd",
+  ]
   solver-name = "gps-cdcl"
   solver-version = 1
