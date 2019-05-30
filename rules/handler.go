@@ -2,6 +2,7 @@ package rules
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 
@@ -32,7 +33,10 @@ func (h *handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	if _, err := w.Write(respBytes); err != nil {
 		log.Println("Could not send HTTP response:", err)
+		return
 	}
+	// Print a newline character to make output from, e.g., curl more readable.
+	_, _ = fmt.Fprintln(w)
 }
 
 func (h *handler) handleHTTPRequest(r *http.Request) ([]byte, error) {

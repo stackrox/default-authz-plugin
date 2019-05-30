@@ -5,16 +5,19 @@ import (
 	"net/http"
 )
 
+// httpErr is an error type that includes an HTTP status code in addition to the error message.
 type httpErr struct {
 	message    string
 	statusCode int
 }
 
+// Error implements the builtin `error` interface.
 func (e httpErr) Error() string {
 	return e.message
 }
 
-// StatusCode returns a HTTP status code for the given error.
+// StatusCode returns a HTTP status code for the given error. If the error is not an HTTP error created via `New` or
+// `Newf` from this package, the default status code to be used is `Internal Server Error (500)`.
 func StatusCode(err error) int {
 	if he, ok := err.(httpErr); ok {
 		return he.statusCode
@@ -35,7 +38,7 @@ func Newf(code int, format string, args ...interface{}) error {
 	return New(code, fmt.Sprintf(format, args...))
 }
 
-// Write writes the given error to the HTTP response writewr.
+// Write writes the given error to the HTTP response writer.
 func Write(w http.ResponseWriter, err error) {
 	http.Error(w, err.Error(), StatusCode(err))
 }
