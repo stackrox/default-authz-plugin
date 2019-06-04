@@ -28,6 +28,9 @@
   name = "github.com/tg123/go-htpasswd"
   revision = "d38e564730bf0836b56dbbfba806ec000c720ef2"
 
+[[constraint]]
+  name = "github.com/PaesslerAG/gval"
+  version = "1.0.1"
 
 [prune]
   go-tests = true

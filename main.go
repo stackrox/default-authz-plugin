@@ -14,6 +14,7 @@ import (
 
 	// Ensure the rule engines are registered.
 	_ "github.com/stackrox/sample-authz-plugin/rules/engines/constant"
+	_ "github.com/stackrox/sample-authz-plugin/rules/engines/gval"
 )
 
 var (
