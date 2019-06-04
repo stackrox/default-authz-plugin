@@ -2,11 +2,17 @@ package gval
 
 import (
 	"bufio"
+	"errors"
 	"fmt"
 	"os"
 	"regexp"
+	"strings"
 
 	"github.com/PaesslerAG/gval"
+)
+
+const (
+	contSuffix = ` \`
 )
 
 var (
@@ -26,6 +32,8 @@ func loadRules(filename string, language gval.Language) ([]gval.Evaluable, error
 
 	var exprs []gval.Evaluable
 	lineNo := 0
+
+	linePrefix := ""
 	for scanner.Scan() {
 		lineNo++
 		line := scanner.Text()
@@ -33,11 +41,22 @@ func loadRules(filename string, language gval.Language) ([]gval.Evaluable, error
 			continue
 		}
 
-		expr, err := language.NewEvaluable(line)
+		if strings.HasSuffix(line, contSuffix) {
+			linePrefix += strings.TrimSuffix(line, contSuffix) + " "
+			continue
+		}
+
+		expr, err := language.NewEvaluable(linePrefix + line)
 		if err != nil {
 			return nil, fmt.Errorf("parsing expression in %s:%d: %v", filename, lineNo, err)
 		}
 		exprs = append(exprs, expr)
+		linePrefix = ""
 	}
+
+	if linePrefix != "" {
+		return nil, errors.New("at end of file: line continuation with no subsequent line")
+	}
+
 	return exprs, nil
 }
