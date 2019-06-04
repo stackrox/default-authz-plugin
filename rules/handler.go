@@ -6,8 +6,8 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/stackrox/sample-authz-plugin/pkg/httperr"
-	"github.com/stackrox/sample-authz-plugin/pkg/payload"
+	"github.com/stackrox/default-authz-plugin/pkg/httperr"
+	"github.com/stackrox/default-authz-plugin/pkg/payload"
 )
 
 // handler wraps a rule engine in a HTTP request handler.

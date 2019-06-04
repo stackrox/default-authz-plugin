@@ -7,14 +7,14 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/stackrox/sample-authz-plugin/rules"
-	"github.com/stackrox/sample-authz-plugin/rules/engines"
-	"github.com/stackrox/sample-authz-plugin/server"
-	"github.com/stackrox/sample-authz-plugin/server/config"
+	"github.com/stackrox/default-authz-plugin/rules"
+	"github.com/stackrox/default-authz-plugin/rules/engines"
+	"github.com/stackrox/default-authz-plugin/server"
+	"github.com/stackrox/default-authz-plugin/server/config"
 
 	// Ensure the rule engines are registered.
-	_ "github.com/stackrox/sample-authz-plugin/rules/engines/constant"
-	_ "github.com/stackrox/sample-authz-plugin/rules/engines/gval"
+	_ "github.com/stackrox/default-authz-plugin/rules/engines/constant"
+	_ "github.com/stackrox/default-authz-plugin/rules/engines/gval"
 )
 
 var (

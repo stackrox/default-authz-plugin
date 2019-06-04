@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/stackrox/sample-authz-plugin/server/config"
+	"github.com/stackrox/default-authz-plugin/server/config"
 )
 
 // ServeFunc abstracts the `ListenAndServe()` or `ListenAndServeTLS("", "")` mechanism of an `http.Server`.

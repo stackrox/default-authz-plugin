@@ -1,8 +1,8 @@
 package constant
 
 import (
-	"github.com/stackrox/sample-authz-plugin/pkg/payload"
-	"github.com/stackrox/sample-authz-plugin/rules/engines"
+	"github.com/stackrox/default-authz-plugin/pkg/payload"
+	"github.com/stackrox/default-authz-plugin/rules/engines"
 )
 
 type engine struct {

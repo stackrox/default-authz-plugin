@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/stackrox/sample-authz-plugin/rules"
+	"github.com/stackrox/default-authz-plugin/rules"
 )
 
 // EngineCreator creates a rule engine. The string argument specifies options for the engine, such as the location of

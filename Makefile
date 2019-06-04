@@ -13,7 +13,7 @@ bin/sample-authz-plugin: $(GOFILES) Gopkg.lock bin/
 
 .PHONY: image
 image:
-	docker build -t stackrox/sample-authz-plugin .
+	docker build -t stackrox/default-authz-plugin .
 
 .PHONY: imports
 imports:

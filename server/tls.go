@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"io/ioutil"
 
-	"github.com/stackrox/sample-authz-plugin/server/config"
+	"github.com/stackrox/default-authz-plugin/server/config"
 )
 
 func createTLSConfig(serverTLSConf *config.TLSConfig, authConf config.AuthConfig) (*tls.Config, error) {
