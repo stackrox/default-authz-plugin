@@ -1,6 +1,6 @@
 GOFILES = $(shell find . \( -name vendor -prune \) -o \( -name '*.go' -print \) )
 
-all: bin/sample-authz-plugin
+all: bin/default-authz-plugin
 
 Gopkg.lock: Gopkg.toml
 	dep ensure
@@ -8,7 +8,7 @@ Gopkg.lock: Gopkg.toml
 bin/:
 	mkdir -p $@
 
-bin/sample-authz-plugin: $(GOFILES) Gopkg.lock bin/
+bin/default-authz-plugin: $(GOFILES) Gopkg.lock bin/
 	go build -o $@ .
 
 .PHONY: image
