@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"log"
 
 	"github.com/PaesslerAG/gval"
 	"github.com/stackrox/default-authz-plugin/pkg/jsonutil"
@@ -59,6 +60,8 @@ func createGvalEngine(options string) (rules.Engine, error) {
 	if err != nil {
 		return nil, err
 	}
+
+	log.Println("Created gval engine with", len(exprs), "rule(s)")
 
 	return engine{
 		expressions: exprs,
