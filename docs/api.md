@@ -15,7 +15,7 @@ requests with a JSON-encoded request body.
 ### Request Format
 
 The request body must be a JSON object of the following form:
-```json
+```
 {
   "principal": {
     "authProvider": {
@@ -73,7 +73,7 @@ all possible nouns.
 If the request is well-formed, the authorization plugin should respond with a
 HTTP 200 (OK) response code. The response body should be a JSON-encoded
 object specifying all the scopes to which access was granted:
-```json
+```
 {
   "authorizedScopes": [
     ... // all requested scopes to which access was granted.

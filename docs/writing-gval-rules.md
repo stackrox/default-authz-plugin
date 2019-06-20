@@ -30,7 +30,7 @@ are:
 
 The input data against which predicates are evaluated can be
 thought of as a JSON object of the following form:
-```json
+```
 {
 	"principal": {
 		... information about the principal ...
