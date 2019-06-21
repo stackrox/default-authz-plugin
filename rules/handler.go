@@ -55,6 +55,7 @@ func (h *handler) handleHTTPRequest(r *http.Request) ([]byte, error) {
 	}
 
 	respBytes, err := json.Marshal(resp)
+	log.Println(string(respBytes))
 	if err != nil {
 		return nil, httperr.Newf(http.StatusInternalServerError, "could not marshal authorization response: %v", err)
 	}
