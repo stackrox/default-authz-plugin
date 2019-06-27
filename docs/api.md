@@ -25,12 +25,16 @@ The request body must be a JSON object of the following form:
     },
     "attributes": {
       // Arbitrary attributes describing a principal (keys are always strings). Dependent on the auth provider.
+      // Typically, values are lists of strings.
     }
   },
   "requestedScopes": [
+  	// Each JSON object in this array is referred to as an "access scope"
+  	// or "scope". A scope determines the resources a principal is trying
+  	// to access, and how they are being accessed ("view" or "edit").
     {
       "verb": ... // The type of operation, "view" or "edit".
-      "noun": ... // The name of the resource to be accessed, such as "Alerts".
+      "noun": ... // The name of the resource to be accessed, such as "Alert".
       "attributes": {
         // Attributes describing the noun. May be omitted, which means that
         // access to all objects of a given resource type irrespective of attributes
@@ -61,8 +65,9 @@ most unspecific):
 3. Cluster
 4. Namespace
 
-Hence, a scope may not specify the namespace but leave the cluster empty, even though the
-opposite is legal.
+Hence, a scope is malformed if a non-empty namespace is specified, but it does not reference
+a cluster. On the other hand, it is legal for a scope to specify a non-empty cluster but omit
+the namespace.
 
 As noted in the schema above, possible values for verbs are
 `view` and `edit`. See the [list of resources](resources.md) for a list of

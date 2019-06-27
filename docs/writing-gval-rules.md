@@ -54,12 +54,12 @@ An example principal/scope combination to be checked could be:
 			"id": "0b6c4f0f-70e3-4686-aea4-e9c20fb24584"
 		},
 		"attributes": {
-			"name": "test-token"
+			"name": ["test-token"]
 		}
 	},
 	"scope": {
 		"verb": "view",
-		"noun": "Deployments",
+		"noun": "Deployment",
 		"attributes": {
 			"cluster": {
 				"name": "remote",
@@ -100,17 +100,17 @@ namespaces starting with `test-` in the cluster with name
 # Note: every predicate must be on a single line, but lines can end with ` \`
 # to indicate that the following line should be considered as part of the
 # current (logical) line.
-
 principal.authProvider.type == "api-token" && \
-	principal.attributes["name"] == "test-token" && \
+	principal.attributes["name"][0] == "test-token" && \
 	scope.verb == "view"
 	
 # Grant edit access to all alerts in namespaces starting with `test-`
-# in the cluster with name `remote` to the same user.
+# in the cluster with name `remote`, as well as alerts in all
+# namespaces in the cluster with name `local` to the same user.
 principal.authProvider.type == "api-token" && \
-	principal.attributes["name"] == "test-token" && \
+	principal.attributes["name"][0] == "test-token" && \
 	scope.verb == "edit" && \
-	scope.noun == "Alerts" && \
+	scope.noun == "Alert" && \
 	( \
 		scope.attributes.cluster.name == "remote" && \
 		scope.attributes.namespace =~ "^test-.*" \

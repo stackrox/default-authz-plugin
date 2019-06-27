@@ -13,7 +13,6 @@ pair, or whether it is a global resource (i.e., attributes will always be empty)
 | AuthPlugin            | Global    |
 | AuthProvider          | Global    |
 | BackupPlugins         | Global    |
-| ClientTrustCerts      | Global    |
 | Cluster               | Cluster   |
 | Compliance            | Global    |
 | ComplianceRunSchedule | Global    |
