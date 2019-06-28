@@ -5,6 +5,9 @@ all: bin/default-authz-plugin
 Gopkg.lock: Gopkg.toml
 	dep ensure
 
+.PHONY: deps
+deps: Gopkg.lock
+
 bin/:
 	mkdir -p $@
 

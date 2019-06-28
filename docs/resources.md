@@ -14,7 +14,7 @@ pair, or whether it is a global resource (i.e., attributes will always be empty)
 | AuthProvider          | Global    |
 | BackupPlugins         | Global    |
 | Cluster               | Cluster   |
-| Compliance            | Global    |
+| Compliance            | Cluster   |
 | ComplianceRunSchedule | Global    |
 | ComplianceRuns        | Cluster   |
 | Config                | Global    |

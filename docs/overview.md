@@ -67,4 +67,19 @@ of this scope. However, there is no fixed sequence in which this occurs: for exa
 access for viewing all deployments is denied, the next query might be for access to view
 deployments in a certain namespace, without ever querying access for all deployments in the
 enclosing cluster. For this reason, it is advisable that Authorization Plugins respect scope
-hierarchies as well.
+hierarchies as well, i.e., if access to a scope is granted, access to all
+sub-scopes of this scopes should be granted as well.
+
+## Default Authorization Plugin
+
+The Default Authorization Plugin is the authorization plugin contained in this
+software bundle. It can be used as-is, or as a reference implementation for customers
+who wish to write their own Authorization Plugins.
+
+The following topics are covered in this documentation:
+- [Building the plugin](building.md)
+- [Configuring the HTTP server](server-config.md)
+- [Description of the HTTP API](api.md)
+- [Writing access rules](writing-gval-rules.md)
+- [List of all resources](resources.md)
+- [Deploying the plugin in Kubernetes](deploying.md)
