@@ -41,6 +41,12 @@ spec:
             - name: tls-certs-volume
               mountPath: /run/secrets/stackrox.io/default-authz-plugin/tls-certs/
               readOnly: true
+            - name: htpasswd-volume
+              mountPath: /run/secrets/stackrox.io/default-authz-plugin/auth-basic/
+              readOnly: true
+            - name: client-ca-volume
+              mountPath: /run/secrets/stackrox.io/default-authz-plugin/auth-clientcert/
+              readOnly: true
           securityContext:
             readOnlyRootFilesystem: true
             capabilities:
@@ -54,6 +60,14 @@ spec:
         - name: tls-certs-volume
           secret:
             secretName: authz-plugin-tls
+        - name: htpasswd-volume
+          secret:
+            secretName: authz-plugin-htpasswd
+            optional: true
+        - name: client-ca-volume
+          secret:
+            secretName: authz-plugin-client-ca
+            optional: true
 ---
 apiVersion: v1
 kind: Service

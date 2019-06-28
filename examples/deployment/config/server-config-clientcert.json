@@ -1,0 +1,10 @@
+{
+  "tls": {
+    "certFile": "/run/secrets/stackrox.io/default-authz-plugin/tls-certs/tls.crt",
+    "keyFile": "/run/secrets/stackrox.io/default-authz-plugin/tls-certs/tls.key"
+  },
+  "auth": {
+    "clientCACertFile": "/run/secrets/stackrox.io/default-authz-plugin/auth-clientcert/client-ca.crt"
+  },
+  "port": 8443
+}
