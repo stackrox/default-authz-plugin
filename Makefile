@@ -1,9 +1,12 @@
 GOFILES = $(shell find . \( -name vendor -prune \) -o \( -name '*.go' -print \) )
 
+GOFLAGS := $(shell [ ! -f go.mod -o "$$PWD" == "$$(go env GOPATH)/src/github.com/stackrox/default-authz-plugin" ] || echo "-mod vendor")
+
 all: bin/default-authz-plugin
 
 Gopkg.lock: Gopkg.toml
 	dep ensure
+	[ ! -f go.mod ] || go mod vendor
 
 .PHONY: deps
 deps: Gopkg.lock
@@ -12,7 +15,7 @@ bin/:
 	mkdir -p $@
 
 bin/default-authz-plugin: $(GOFILES) Gopkg.lock bin/
-	go build -o $@ .
+	go build $(GOFLAGS) -o $@ .
 
 .PHONY: image
 image:
@@ -36,7 +39,7 @@ lint:
 .PHONY: vet
 vet:
 	@echo "+ $@"
-	go vet ./...
+	go vet $(GOFLAGS) ./...
 
 .PHONY: style
 style:

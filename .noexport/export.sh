@@ -36,6 +36,9 @@ git -C "${root}" ls-files | egrep -v '^\.noexport/' | egrep -v '(^|/)\.gitignore
 	| tar -C "$export_dir" -xf -
 
 "${root}/.noexport/generate-third-party-notices.sh" "${export_dir}/THIRD_PARTY_NOTICES"
+mv "${export_dir}/vendor" "${export_dir}/vendor-safe"
+( cd "${export_dir}" ; go mod init github.com/stackrox/default-authz-plugin )
+
 
 archive_basename="default-authz-plugin-${tag}-src"
 
