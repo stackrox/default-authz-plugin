@@ -43,6 +43,8 @@ archive_basename="default-authz-plugin-${tag}-src"
 
 cd "$tmpdir"
 
+mkdir -p "${out_dir}"
+
 tar -cvzf "${out_dir}/${archive_basename}.tar.gz" default-authz-plugin
 zip -r "${out_dir}/${archive_basename}.zip" default-authz-plugin
 
