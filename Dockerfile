@@ -19,7 +19,7 @@ ENV CGO_ENABLED=0
 WORKDIR /go/src/github.com/stackrox/default-authz-plugin
 COPY . .
 
-RUN go build -mod vendor -o /default-authz-plugin .
+RUN go build -o /default-authz-plugin .
 
 FROM scratch
 COPY --from=build /default-authz-plugin /
