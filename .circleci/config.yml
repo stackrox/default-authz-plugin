@@ -152,7 +152,7 @@ jobs:
       - run:
           name: Upload source archives
           command: |
-            gsutil cp source-achives/* "gs://sr-authz-plugin-src/${CIRCLE_TAG}/"
+            gsutil cp source-archives/* "gs://sr-authz-plugin-src/${CIRCLE_TAG}/"
 
       - run:
           name: Log in to Dockerhub and stackrox.io
