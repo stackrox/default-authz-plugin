@@ -13,6 +13,13 @@ When using the above script, the Authorization Plugin endpoint is accessible in 
 cluster via `https://authorization-plugin.stackrox/authorize`. A network policy is
 created that restricts access to this endpoint to Central. The TLS certificates
 
+**A note on performance:** When enabled, the Authorization Plugin is queried for all
+accesses to the StackRox API originating from human or API token users. In order to
+ensure a minimal impact on latency, we strongly recommend to run the Authorization Plugin
+on the same node where the StackRox Central Pod is running. The aforementioned YAML
+template includes an [inter-pod affinity](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/)
+configuration for this.
+
 ## TLS Certificates
 
 The above deploy script uses pre-created TLS certificates. We **strongly** recommend
