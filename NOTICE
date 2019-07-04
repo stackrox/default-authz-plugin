@@ -1,3 +1,8 @@
-StackRox Default Authorization Plugin uses third-party software libraries.
+StackRox Default Authorization Plugin
+Copyright 2019 StackRox Inc.
 
-Please see the THIRD_PARTY_NOTICES/ directory for the license terms of these libraries.
+This product is licensed under the Apache License, version 2.0.
+Please see the LICENSE file for the full terms of the license.
+
+In addition, this product uses several third-party software libraries.
+Please see the THIRD_PARTY_NOTICES directory for the license terms of these libraries.
