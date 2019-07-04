@@ -1,6 +1,6 @@
 GOFILES = $(shell find . \( -name vendor -prune \) -o \( -name '*.go' -print \) )
 
-GOFLAGS := $(shell [ ! -f go.mod -o "$$PWD" == "$$(go env GOPATH)/src/github.com/stackrox/default-authz-plugin" ] || echo "-mod vendor")
+GOFLAGS := $(shell [ ! -f go.mod -o "$$PWD" = "$$(go env GOPATH)/src/github.com/stackrox/default-authz-plugin" ] || echo "-mod vendor")
 
 all: bin/default-authz-plugin
 
