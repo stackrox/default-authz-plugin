@@ -44,3 +44,7 @@ style:
 	@$(MAKE) imports
 	@$(MAKE) fmt
 	@$(MAKE) -k lint vet
+
+.PHONY: tag
+tag:
+	@git describe --tags --abbrev=10 --dirty --long --always
