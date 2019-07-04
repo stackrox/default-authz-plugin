@@ -154,6 +154,8 @@ jobs:
           command: |
             gsutil cp source-archives/* "gs://sr-authz-plugin-src/${CIRCLE_TAG}/"
 
+      - setup_remote_docker
+
       - run:
           name: Log in to Dockerhub and stackrox.io
           command: |
