@@ -19,6 +19,20 @@ spec:
       labels:
         app: authorization-plugin
     spec:
+      # Attempt to schedule the Authorization Plugin pod to be scheduled on the same
+      # node as the Central pod in order to keep latency minimal. If you want to make
+      # this a hard requirement, change "preferred" to "required" below.
+      affinity:
+        podAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchLabels:
+                  app: central
+              namespaces:
+              - stackrox
+              topologyKey: kubernetes.io/hostname
       containers:
         - name: central
           image: ${IMAGE}
