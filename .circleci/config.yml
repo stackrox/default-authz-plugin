@@ -128,8 +128,53 @@ jobs:
           name: Push image to DockerHub
           command: |
             image_tag="stackrox/default-authz-plugin:$(make tag)"
-            docker tag stackrox/default-authz-plugin:latest "${image_name}"
+            docker tag stackrox/default-authz-plugin:latest "${image_tag}"
             docker push "${image_tag}"
+
+      - persist_to_workspace:
+          root: .
+          paths:
+            - source-archives
+
+
+  publish:
+    <<: *defaults
+
+    steps:
+      - run:
+          name: Set up GCloud
+          command: |
+            gcloud auth activate-service-account --key-file <(echo "$GCLOUD_SERVICE_ACCOUNT")
+            gcloud auth list
+
+      - attach_workspace:
+          at: /go/src/github.com/stackrox/default-authz-plugin
+
+      - run:
+          name: Verify that we have a CircleCI tag
+          command: |
+            [[ -n "$CIRCLE_TAG" ]]
+
+      - run:
+          name: Upload source archives
+          command: |
+            gsutil cp source-achives/* "gs://sr-authz-plugin-src/${CIRCLE_TAG}/"
+
+      - run:
+          name: Log in to Dockerhub and stackrox.io
+          command: |
+            docker login -u "$DOCKER_IO_PUSH_USERNAME" -p "$DOCKER_IO_PUSH_PASSWORD" docker.io
+            docker login -u "$STACKROX_IO_PUSH_USERNAME" -p "$STACKROX_IO_PUSH_PASSWORD" stackrox.io
+
+      - run:
+          name: Push images to stackrox.io
+          command: |
+            dockerhub_tag="docker.io/stackrox/default-authz-plugin:${CIRCLE_TAG}"
+            stackroxio_tag="stackrox.io/default-authz-plugin:${CIRCLE_TAG}"
+            docker pull "$dockerhub_tag"
+            docker tag "$dockerhub_tag" "$stackroxio_tag"
+            docker push "$stackroxio_tag"
+
 
 workflows:
   version: 2
@@ -137,3 +182,16 @@ workflows:
     jobs:
       - build:
           context: docker-io-push
+          filters:
+            tags:
+              only: /.*/
+
+      - publish:
+          context: docker-io-and-stackrox-io-push
+          requires:
+            - build
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^(?!.*-rc\.\d+$).*$/
