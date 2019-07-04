@@ -13,8 +13,6 @@ root="$(git rev-parse --show-toplevel)"
 
 out_dir="${1:-$PWD}"
 
-cd "$root"
-
 tag="$(make -s -C "$root" tag)"
 
 exclude_patterns=()
@@ -33,7 +31,7 @@ tmpdir="$(mktemp -d)"
 export_dir="${tmpdir}/default-authz-plugin"
 mkdir "$export_dir"
 
-git ls-files | egrep -v '^\.noexport/' | egrep -v '(^|/)\.gitignore$' | egrep -v "$exclude_regex" \
+git -C "${root}" ls-files | egrep -v '^\.noexport/' | egrep -v '(^|/)\.gitignore$' | egrep -v "$exclude_regex" \
 	| xargs -- tar -cf - \
 	| tar -C "$export_dir" -xf -
 
@@ -41,11 +39,11 @@ git ls-files | egrep -v '^\.noexport/' | egrep -v '(^|/)\.gitignore$' | egrep -v
 
 archive_basename="default-authz-plugin-${tag}-src"
 
-cd "$tmpdir"
+mkdir -p "$out_dir"
+cd "$out_dir"
+out_dir_abs="$(pwd)"
 
-mkdir -p "${out_dir}"
+tar -C "$tmpdir" -cvzf "${out_dir_abs}/${archive_basename}.tar.gz" default-authz-plugin
+( cd "$tmpdir" ; zip -r "${out_dir_abs}/${archive_basename}.zip" default-authz-plugin )
 
-tar -cvzf "${out_dir}/${archive_basename}.tar.gz" default-authz-plugin
-zip -r "${out_dir}/${archive_basename}.zip" default-authz-plugin
-
-echo "Wrote source archives to ${out_dir}"
+echo "Wrote source archives to ${out_dir_abs}"
