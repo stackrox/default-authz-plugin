@@ -32,7 +32,7 @@ spec:
                   app: central
               namespaces:
               - stackrox
-              topologyKey: failure-domain.beta.kubernetes.io/zone
+              topologyKey: kubernetes.io/hostname
       containers:
         - name: central
           image: ${IMAGE}
