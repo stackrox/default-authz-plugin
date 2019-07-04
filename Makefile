@@ -45,6 +45,10 @@ style:
 	@$(MAKE) fmt
 	@$(MAKE) -k lint vet
 
+.PHONY: tests
+	@echo "+ $@"
+	@go test ./...
+
 .PHONY: tag
 tag:
-	@git describe --tags --abbrev=10 --dirty --long --always
+	@git describe --tags --abbrev=10 --dirty --long

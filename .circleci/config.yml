@@ -1,26 +1,133 @@
-# Golang CircleCI 2.0 configuration file
-#
-# Check https://circleci.com/docs/2.0/language-go/ for more details
+defaults: &defaults
+  docker:
+    - image: docker.io/stackrox/apollo-ci:0.1.11-31-g63504e3520
+      auth:
+        username: $DOCKER_IO_PULL_USERNAME
+        password: $DOCKER_IO_PULL_PASSWORD
+  working_directory: /go/src/github.com/stackrox/default-authz-plugin
+
+
 version: 2
+
 jobs:
+
   build:
-    docker:
-      # specify the version
-      - image: circleci/golang:1.9
+    <<: *defaults
 
-      # Specify service dependencies here if necessary
-      # CircleCI maintains a library of pre-built images
-      # documented at https://circleci.com/docs/2.0/circleci-images/
-      # - image: circleci/postgres:9.4
-
-    #### TEMPLATE_NOTE: go expects specific checkout path representing url
-    #### expecting it in the form of
-    ####   /go/src/github.com/circleci/go-tool
-    ####   /go/src/bitbucket.org/circleci/go-tool
-    working_directory: /go/src/github.com/{{ORG_NAME}}/{{REPO_NAME}}
     steps:
       - checkout
 
-      # specify any bash command here prefixed with `run: `
-      - run: go get -v -t -d ./...
-      - run: go test -v ./...
+      - run:
+          name: Install OSSLS
+          working_directory: /tmp
+          command: |
+            wget --quiet https://github.com/gruntwork-io/fetch/releases/download/v0.3.2/fetch_linux_amd64
+            sudo install fetch_linux_amd64 /usr/bin/fetch
+            export GITHUB_OAUTH_TOKEN="$GITHUB_TOKEN"
+            fetch --repo="https://github.com/stackrox/ossls" --tag="0.5.0-rc1" --release-asset="ossls_linux_amd64" .
+            sudo install ossls_linux_amd64 /usr/bin/ossls
+            ossls version
+
+      - run:
+          name: Install linters
+          command: |
+            go get golang.org/x/tools/cmd/goimports
+            go get golang.org/x/lint/golint
+
+      - run:
+          name: Verify dependencies are up-to-date
+          command:
+            git ls-files --others --exclude-standard >/tmp/untracked
+            make deps
+            git diff --exit-code HEAD
+            { git ls-files --others --exclude-standard ; cat /tmp/untracked ; } | sort | uniq -u >/tmp/untracked-new
+            if [[ -s /tmp/untracked-new ]]; then
+              echo 'Found new untracked files after running `make deps`. Please ensure your dependencies are up-to-date.'
+              cat /tmp/untracked-new
+              exit 1
+            fi
+
+      - run:
+          name: Run style checks
+          command: |
+            make style
+
+      - run:
+          name: Run unit tests
+          command: |
+            make tests
+
+      - run:
+          name: Verify server binary can be built for the host system
+          command: |
+            make
+
+      - run:
+          name: Export source archives
+          command: |
+            mkdir -p source-archives
+            .noexport/export.sh source-archives
+
+      - store_artifacts:
+          path: source-archives
+          destination: src
+
+      - run:
+          name: Verify contents of source archives are equal
+          command: |
+            archive_dir="${PWD}/source-archives"
+            archive_basename="default-authz-plugin-$(make tag)-src"
+
+            mkdir -p /tmp/tgz-contents
+            cd /tmp/tgz-contents
+            tar xfvz "${archive_dir}/${archive_basename}.tar.gz"
+            tar_digest="$(find . -type f -exec openssl dgst -sha256 {} \; | sort | openssl dgst -sha256)"
+
+            mkdir -p /tmp/zip-contents
+            cd /tmp/zip-contents
+            unzip "${archive_dir}/${archive_basename}.zip"
+            zip_digest="$(find . -type f -exec openssl dgst -sha256 {} \; | sort | openssl dgst -sha256)"
+
+            if [[ "$tar_digest" != "$zip_digest" ]]; then
+              echo >&2 "Digest mismatch between tar (${tar_digest}) and zip (${zip_digest}) contents."
+              exit 1
+            fi
+
+      - run:
+          name: Verify server binary can be built from source archive
+          working_directory: /tmp/tgz-contents/default-authz-plugin
+          command: |
+            make
+
+      - run:
+          name: Verify unit tests and style checks pass for source archive
+          working_directory: /tmp/tgz-contents/default-authz-plugin
+          command: |
+            make style tests
+
+      - setup_remote_docker
+
+      - run:
+          name: Build image from source archive
+          working_directory: /tmp/tgz-contents/default-authz-plugin
+          command: |
+            make image
+
+      - run:
+          name: Login to DockerHub
+          command: |
+            docker login -u "$DOCKER_IO_PUSH_USERNAME" -p "$DOCKER_IO_PUSH_PASSWORD" docker.io
+
+      - run:
+          name: Push image to DockerHub
+          command: |
+            image_tag="stackrox/default-authz-plugin:$(make tag)"
+            docker tag stackrox/default-authz-plugin:latest "${image_name}"
+            docker push "${image_tag}"
+
+workflows:
+  version: 2
+  build:
+    jobs:
+      - build:
+          context: docker-io-push

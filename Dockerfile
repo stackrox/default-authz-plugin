@@ -24,5 +24,7 @@ FROM scratch
 COPY --from=build /default-authz-plugin /
 
 COPY LICENSE /
+COPY THIRD_PARTY_NOTICES/ /
+COPY NOTICE /
 
 ENTRYPOINT ["/default-authz-plugin"]
