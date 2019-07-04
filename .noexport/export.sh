@@ -32,7 +32,7 @@ export_dir="${tmpdir}/default-authz-plugin"
 mkdir "$export_dir"
 
 git -C "${root}" ls-files | egrep -v '^\.noexport/' | egrep -v '(^|/)\.gitignore$' | egrep -v "$exclude_regex" \
-	| xargs -- tar -cf - \
+	| xargs -- tar -C "${root}" -cf - \
 	| tar -C "$export_dir" -xf -
 
 "${root}/.noexport/generate-third-party-notices.sh" "${export_dir}/THIRD_PARTY_NOTICES"
