@@ -54,4 +54,4 @@ style:
 
 .PHONY: tag
 tag:
-	@git describe --tags --abbrev=10 --dirty --long
+	@git describe --tags --abbrev=10 --dirty
