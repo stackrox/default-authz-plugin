@@ -1,0 +1,5 @@
+# Exclude patterns for exporting source archive.
+# Every line needs to specify a single regex pattern that matches an output line from `git ls-files`.
+# Empty lines and lines starting with a hash sign (`#`) are ignored.
+
+^\.circleci/

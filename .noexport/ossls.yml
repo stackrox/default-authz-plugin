@@ -1,0 +1,15 @@
+dep:
+  lockfile: Gopkg.lock
+  vendor-dir: vendor
+
+patterns:
+  - "*AUTHOR*"
+  - "*COPYING*"
+  - "*LICENSE*"
+  - "*LICENCE*"
+  - "*NOTICE*"
+  - "*author*"
+  - "*copying*"
+  - "*license*"
+  - "*License*"
+  - "*notice*"

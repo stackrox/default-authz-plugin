@@ -9,8 +9,18 @@ Building the Default Authorization Plugin Docker image requires:
 If you want to make modifications to the source code and/or build the server
 for your local host system (not in a Docker image), you will most likely also need:
 - [dep](https://github.com/golang/dep)
-- A recent version of [Go](https://golang.org) (tested with 1.12, but anything >= 1.9 should work just fine)
+- A recent version of [Go](https://golang.org) (minimum 1.11, tested with 1.12, also see the note below)
 - [golint](https://github.com/golang/lint)
+- [goimports](https://godoc.org/golang.org/x/tools/cmd/goimports)
+
+**Note on required Go version:** The Default Authorization Plugin supports building with Go modules.
+This requires a minimum Go version of 1.11. However, if you are using an older version of Go, or do
+not want to use Go modules, you can do so by placing the source root directory inside your
+`GOPATH` (check the output of `go env GOPATH` for the location on your system). For doing so,
+make sure the source root is located at `$GOPATH/src/github.com/stackrox/default-authz-plugin`.
+
+The above only applies to builds for your local host system (via `make`); builds of Docker images
+(`make image`) are not affected.
 
 ## Build Steps
 
