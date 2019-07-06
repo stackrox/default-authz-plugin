@@ -16,7 +16,10 @@ limitations under the License.
 
 package payload
 
-import "fmt"
+import (
+	"encoding/json"
+	"fmt"
+)
 
 // Cluster identifies a Cluster managed by the StackRox Kubernetes Security Platform.
 type Cluster struct {
@@ -32,6 +35,24 @@ type NounAttributes struct {
 	Namespace string  `json:"namespace,omitempty"`
 }
 
+// MarshalJSON marshals noun attributes, omitting an empty cluster.
+func (a *NounAttributes) MarshalJSON() ([]byte, error) {
+	// Alias `NounAttributes` type to hide the `MarshalJSON` method, as that would otherwise cause an infinite
+	// recursion.
+	type NounAttributesWithoutCustomMarshaller NounAttributes
+	toMarshal := struct {
+		Cluster *Cluster `json:"cluster,omitempty"`
+
+		*NounAttributesWithoutCustomMarshaller
+	}{
+		NounAttributesWithoutCustomMarshaller: (*NounAttributesWithoutCustomMarshaller)(a),
+	}
+	if a.Cluster != (Cluster{}) {
+		toMarshal.Cluster = &a.Cluster
+	}
+	return json.Marshal(&toMarshal)
+}
+
 // AccessScope defines an access scope to be accessed, consisting of a verb (operation, "read" or "edit"), a noun
 // (resource, e.g., "deployment"), and possibly attributes further describing the noun (cluster and namespace).
 // A scope may not be fully specified, and any unset attribute is interpreted as encompassing all scopes for all
@@ -45,6 +66,22 @@ type AccessScope struct {
 	Noun string `json:"noun,omitempty"`
 
 	Attributes NounAttributes `json:"attributes,omitempty"`
+}
+
+// MarshalJSON marshals an access scope, omitting an empty `attributes` struct.
+func (s AccessScope) MarshalJSON() ([]byte, error) {
+	// Alias `AccessScope` type to hide the `MarshalJSON` method, as that would otherwise cause an infinite recursion.
+	type AccessScopeWithoutCustomMarshaller AccessScope
+	toMarshal := struct {
+		*AccessScopeWithoutCustomMarshaller
+		Attributes *NounAttributes `json:"attributes,omitempty"`
+	}{
+		AccessScopeWithoutCustomMarshaller: (*AccessScopeWithoutCustomMarshaller)(&s),
+	}
+	if s.Attributes != (NounAttributes{}) {
+		toMarshal.Attributes = &s.Attributes
+	}
+	return json.Marshal(toMarshal)
 }
 
 // ValidateScope checks if an AccessScope is valid, according to the above description.
