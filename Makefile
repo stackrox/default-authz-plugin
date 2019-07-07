@@ -1,12 +1,21 @@
 GOFILES = $(shell find . \( -name vendor -prune \) -o \( -name '*.go' -print \) )
 
-GOFLAGS := $(shell [ ! -f go.mod -o "$$PWD" = "$$(go env GOPATH)/src/github.com/stackrox/default-authz-plugin" ] || echo "-mod vendor")
+USE_GO_MODULES := $(shell [ ! -f go.mod -o "$$PWD" = "$$(go env GOPATH)/src/github.com/stackrox/default-authz-plugin" ] && echo 0 || echo 1)
+
+ifeq ($(USE_GO_MODULES), 1)
+	GOFLAGS := -mod vendor
+else
+	GOFLAGS :=
+endif
 
 all: bin/default-authz-plugin
 
 Gopkg.lock: Gopkg.toml
+ifeq ($(USE_GO_MODULES), 1)
+	go mod vendor
+else
 	dep ensure
-	[ ! -f go.mod ] || go mod vendor
+endif
 
 .PHONY: deps
 deps: Gopkg.lock
