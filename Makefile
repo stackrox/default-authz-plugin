@@ -11,9 +11,10 @@ endif
 all: bin/default-authz-plugin
 
 Gopkg.lock: Gopkg.toml
-	dep ensure
 ifeq ($(USE_GO_MODULES), 1)
 	go mod vendor
+else
+	dep ensure
 endif
 
 .PHONY: deps
