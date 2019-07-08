@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM golang:1.12.5-alpine3.9 AS build
+FROM golang:1.12.6-alpine3.10 AS build
 
 ENV CGO_ENABLED=0
 
