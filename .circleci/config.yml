@@ -187,9 +187,17 @@ jobs:
       - run:
           name: Upload artifacts
           command: |
+            if [[ "$CIRCLE_TAG" =~ -rc\.?[[:digit:]]+$ ]]; then
+              PUSH_NOTE="This is an RC build. Images have **NOT** been pushed to \`stackrox.io\`."
+            else
+              PUSH_NOTE="An image has been published at \`stackrox.io\` as \`stackrox.io/default-authz-plugin:${CIRCLE_TAG}\`."
+            fi
+
             RELEASE_BODY="Release version ${CIRCLE_TAG} of the Default Authorization Plugin
 
             This release is **NOT** ready to be distributed to customers.
+
+            ${PUSH_NOTE}
 
             **IMPORTANT**: DO **NOT** distribute the GitHub-created \"Source code\" archives to customers (these will
             carry names like \`${CIRCLE_TAG}.zip\` or \`${CIRCLE_TAG}.tar.gz\`). Instead, use the attached files named
@@ -201,6 +209,7 @@ jobs:
             ghr -u stackrox -r default-authz-plugin -draft -prerelease \
               -n "Release ${CIRCLE_TAG} [NOT FOR DISTRIBUTION]" \
               -b "$RELEASE_BODY" \
+              "${CIRCLE_TAG}" \
               source-archives/
 
 workflows:
@@ -221,7 +230,7 @@ workflows:
             branches:
               ignore: /.*/
             tags:
-              only: /^(?!.*-rc\.\d+$).*$/
+              only: /^(?!.*-rc\.?\d+$).*$/
 
       - release:
           requires:
@@ -230,4 +239,4 @@ workflows:
             branches:
               ignore: /.*/
             tags:
-              only: /^(?!.*-rc\.\d+$).*$/
+              only: /.*$/
