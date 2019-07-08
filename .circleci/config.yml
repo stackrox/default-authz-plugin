@@ -196,6 +196,7 @@ jobs:
             \`default-authz-plugin-${CIRCLE_TAG}-src.{zip,tar.gz}\`. You can also find them in the
             \`sr-authz-plugin-src\` GCloud bucket at
             \`gs://sr-authz-plugin-src/${CIRCLE_TAG}/default-authz-plugin-${CIRCLE_TAG}-src.{zip,tar.gz}\`.
+            "
 
             ghr -u stackrox -r default-authz-plugin -draft -prerelease \
               -n "Release ${CIRCLE_TAG} [NOT FOR DISTRIBUTION]" \
