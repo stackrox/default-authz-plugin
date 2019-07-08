@@ -187,7 +187,7 @@ jobs:
       - run:
           name: Upload artifacts
           command: |
-            ghr -u stackrox -r default-authz-plugin -soft -draft \
+            ghr -u stackrox -r default-authz-plugin -draft \
               "${CIRCLE_TAG}" \
               source-archives/
 
