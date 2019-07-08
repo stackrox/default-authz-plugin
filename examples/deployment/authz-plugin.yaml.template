@@ -34,7 +34,7 @@ spec:
               - stackrox
               topologyKey: kubernetes.io/hostname
       containers:
-        - name: central
+        - name: authorization-plugin
           image: ${IMAGE}
           args:
             - -server-config=/etc/stackrox-authz-plugin/config/server-config.json

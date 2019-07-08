@@ -171,6 +171,25 @@ jobs:
             docker tag "$dockerhub_tag" "$stackroxio_tag"
             docker push "$stackroxio_tag"
 
+  release:
+    docker:
+      - image: cibuilds/github:0.12.0
+    working_directory: /go/src/github.com/stackrox/default-authz-plugin
+    steps:
+      - attach_workspace:
+          at: .
+
+      - run:
+          name: Verify that we have a CircleCI tag
+          command: |
+            [[ -n "$CIRCLE_TAG" ]]
+
+      - run:
+          name: Upload artifacts
+          command: |
+            ghr -u stackrox -r default-authz-plugin -draft \
+              "${CIRCLE_TAG}" \
+              source-archives/
 
 workflows:
   version: 2
@@ -184,6 +203,15 @@ workflows:
 
       - publish:
           context: docker-io-and-stackrox-io-push
+          requires:
+            - build
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^(?!.*-rc\.\d+$).*$/
+
+      - release:
           requires:
             - build
           filters:
