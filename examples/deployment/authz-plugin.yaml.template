@@ -65,6 +65,7 @@ spec:
             readOnlyRootFilesystem: true
             capabilities:
               drop: ["ALL"]
+      # Remove the following two lines if deploying the image does not require image pull secrets.
       imagePullSecrets:
         - name: stackrox
       volumes:

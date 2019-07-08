@@ -20,6 +20,31 @@ on the same node where the StackRox Central Pod is running. The aforementioned Y
 template includes an [inter-pod affinity](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/)
 configuration for this.
 
+## Accessing the Docker Image
+
+A pre-built Docker image for the Default Authorization Plugin is published via the `stackrox.io`
+registry, and can be pulled as `stackrox.io/default-authz-plugin:1.0`. This image is equivalent to
+the image built by running `make image` on unmodified sources (see also the documentation on [building](building.md)).
+
+The image published via the `stackrox.io` registry is accessible only to authenticated clients. You can
+use the `stackrox.io` credentials you should have received as a customer of the StackRox Kubernetes Security
+Platform.
+
+For deployment in a Kubernetes cluster, these credentials need to be stored as an *image pull secret*.
+The deployment YAML template contained in this repository assumes this secret is called `stackrox`.
+This matches the name of the image pull secret used for pulling the main StackRox Kubernetes Security
+Platform Docker images, created by the `setup.sh` script that is part of the StackRox Central deployment
+bundle. Hence, if you deploy the Default Authorization Plugin in the same Kubernetes cluster that is running
+StackRox Central (recommended), no further action with respect to image pull secret setup is required. If you
+deploy it in a different cluster, run the `setup.sh` script from the StackRox Central deployment bundle in the respective
+cluster.
+
+If you require custom modifications to the Default Authorization Plugin, or wish to build
+the Docker image yourself, we assume you know the relevant steps of deploying from the respective
+registry that stores your built and pushed image inside your cluster. If you do not require image pull
+secrets for accessing this registry, remove the relevant `imagePullSecrets` parts from the
+`authz-plugin.yaml.template` YAML template.
+
 ## TLS Certificates
 
 The above deploy script uses pre-created TLS certificates. We **strongly** recommend
@@ -49,7 +74,9 @@ environment variables prior to running `deploy.sh`. These environment variables 
 - `RULES_FILE` controls the location of the [Gval rules file](writing-gval-rules.md) that defines
   access rules. This file will be mounted into the container as
   `/etc/stackrox-authz-plugin/config/rules.gval`.
-- `AUTHZ_PLUGIN_IMAGE` is the image of the Authorization Plugin.
+- `AUTHZ_PLUGIN_IMAGE` is the image of the Authorization Plugin. This defaults to the image published
+  via the `stackrox.io` registry, i.e., `stackrox.io/default-authz-plugin:<version>`. Change this if
+  you obtain the image from a different registry.
 
 By default, the Default Authorization Plugin is set up to allow anonymous access (the network
 policy ensures that only Central can talk to its API port). If this seems too insecure for your
