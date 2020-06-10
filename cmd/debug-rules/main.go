@@ -36,7 +36,7 @@ func mainCmd() error {
 
 	rules, err := gval.LoadRules(file, gval.ExprLanguage)
 	if err != nil {
-		return fmt.Errorf("failed to load GVal rules from file %q: %w", file, err)
+		return fmt.Errorf("failed to load GVal rules from file %q: %v", file, err)
 	}
 
 	fmt.Fprintln(os.Stderr, "Loaded", len(rules), "rule(s) from file", file)
@@ -66,7 +66,7 @@ func mainCmd() error {
 			if err == io.EOF {
 				return nil
 			}
-			return fmt.Errorf("reading JSON input: %w", err)
+			return fmt.Errorf("reading JSON input: %v", err)
 		}
 
 		var matchingRules []gval.Rule
