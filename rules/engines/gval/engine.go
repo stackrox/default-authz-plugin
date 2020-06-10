@@ -68,9 +68,14 @@ func createGvalEngine(options string) (rules.Engine, error) {
 	var err error
 	if options[0] == '@' {
 		exprs = make([]gval.Evaluable, 1)
-		exprs[0], err = exprLanguage.NewEvaluable(options[1:])
+		exprs[0], err = ExprLanguage.NewEvaluable(options[1:])
 	} else {
-		exprs, err = loadRules(options, exprLanguage)
+		var parsedRules []Rule
+		parsedRules, err = LoadRules(options, ExprLanguage)
+		exprs = make([]gval.Evaluable, 0, len(parsedRules))
+		for _, rule := range parsedRules {
+			exprs = append(exprs, rule.Expression)
+		}
 	}
 
 	if err != nil {
