@@ -1,0 +1,11 @@
+# github.com/PaesslerAG/gval v1.0.1
+github.com/PaesslerAG/gval
+# github.com/tg123/go-htpasswd v0.0.0-20190305225429-d38e564730bf
+github.com/tg123/go-htpasswd
+# golang.org/x/crypto v0.0.0-20190513172903-22d7a77e9e5f
+golang.org/x/crypto/bcrypt
+golang.org/x/crypto/blowfish
+golang.org/x/crypto/ssh/terminal
+# golang.org/x/sys v0.0.0-20190412213103-97732733099d
+golang.org/x/sys/unix
+golang.org/x/sys/windows

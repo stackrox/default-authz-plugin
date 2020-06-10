@@ -23,6 +23,18 @@ deps: Gopkg.lock
 bin/:
 	mkdir -p $@
 
+bin/tools/:
+	mkdir -p $@
+
+bin/tools/%-linux: $(GOFILES) bin/tools/
+	GOOS=linux CGO_ENABLED=0 go build $(GOFLAGS) -o $@ ./cmd/$*
+
+bin/tools/%-darwin: $(GOFILES) bin/tools/
+	GOOS=darwin CGO_ENABLED=0 go build $(GOFLAGS) -o $@ ./cmd/$*
+
+bin/tools/%.exe: $(GOFILES) bin/tools/
+	GOOS=windows CGO_ENABLED=0 go build $(GOFLAGS) -o $@ ./cmd/$*
+
 bin/default-authz-plugin: $(GOFILES) Gopkg.lock bin/
 	go build $(GOFLAGS) -o $@ .
 

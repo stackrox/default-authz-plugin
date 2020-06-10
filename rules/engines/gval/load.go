@@ -22,6 +22,7 @@ import (
 	"fmt"
 	"os"
 	"regexp"
+	"strconv"
 	"strings"
 
 	"github.com/PaesslerAG/gval"
@@ -35,9 +36,29 @@ var (
 	ignoreRE = regexp.MustCompile(`^\s*(#.*)?$`)
 )
 
-// loadRules loads rules (specified as gval expressions) from the given file, one expression per line. Empty lines,
+// Rule is the description (and parsed Evaluable) of a rule, loaded from a rules file.
+type Rule struct {
+	Filename            string
+	FirstLine, LastLine int
+
+	Rule       string
+	Expression gval.Evaluable
+}
+
+// Location returns the location in the file where a rule is defined.
+func (r *Rule) Location() string {
+	var lineRange string
+	if r.LastLine == r.FirstLine {
+		lineRange = strconv.Itoa(r.FirstLine)
+	} else {
+		lineRange = fmt.Sprintf("%d-%d", r.FirstLine, r.LastLine)
+	}
+	return fmt.Sprintf("%s:%s", r.Filename, lineRange)
+}
+
+// LoadRules loads rules (specified as gval expressions) from the given file, one expression per line. Empty lines,
 // or lines including comments only, are ignored.
-func loadRules(filename string, language gval.Language) ([]gval.Evaluable, error) {
+func LoadRules(filename string, language gval.Language) ([]Rule, error) {
 	file, err := os.Open(filename)
 	if err != nil {
 		return nil, err
@@ -46,15 +67,21 @@ func loadRules(filename string, language gval.Language) ([]gval.Evaluable, error
 
 	scanner := bufio.NewScanner(file)
 
-	var exprs []gval.Evaluable
+	var rules []Rule
 	lineNo := 0
+
+	var startLine int
 
 	linePrefix := ""
 	for scanner.Scan() {
 		lineNo++
-		line := scanner.Text()
+		line := strings.TrimSpace(scanner.Text())
 		if ignoreRE.MatchString(line) {
 			continue
+		}
+
+		if linePrefix == "" {
+			startLine = lineNo
 		}
 
 		if strings.HasSuffix(line, contSuffix) {
@@ -62,11 +89,19 @@ func loadRules(filename string, language gval.Language) ([]gval.Evaluable, error
 			continue
 		}
 
-		expr, err := language.NewEvaluable(linePrefix + line)
+		exprStr := linePrefix + line
+		expr, err := language.NewEvaluable(exprStr)
 		if err != nil {
 			return nil, fmt.Errorf("parsing expression in %s:%d: %v", filename, lineNo, err)
 		}
-		exprs = append(exprs, expr)
+		rule := Rule{
+			Filename:   filename,
+			FirstLine:  startLine,
+			LastLine:   lineNo,
+			Rule:       exprStr,
+			Expression: expr,
+		}
+		rules = append(rules, rule)
 		linePrefix = ""
 	}
 
@@ -74,5 +109,5 @@ func loadRules(filename string, language gval.Language) ([]gval.Evaluable, error
 		return nil, errors.New("at end of file: line continuation with no subsequent line")
 	}
 
-	return exprs, nil
+	return rules, nil
 }
