@@ -10,6 +10,8 @@ import (
 	"log"
 	"os"
 
+	"golang.org/x/crypto/ssh/terminal"
+
 	"github.com/stackrox/default-authz-plugin/rules/engines/gval"
 )
 
@@ -39,10 +41,26 @@ func mainCmd() error {
 
 	fmt.Fprintln(os.Stderr, "Loaded", len(rules), "rule(s) from file", file)
 
+	if terminal.IsTerminal(int(os.Stdin.Fd())) {
+		fmt.Fprintln(os.Stderr, "============================================")
+		fmt.Fprintln(os.Stderr, "StackRox GVal rules evaluator")
+		fmt.Fprintln(os.Stderr)
+		fmt.Fprintln(os.Stderr, "This tool evaluates GVal rules from a file against arbitrary JSON objects.")
+		fmt.Fprintln(os.Stderr, "Just type in the JSON objects you want to evaluate the rules against. An example")
+		fmt.Fprintln(os.Stderr, "JSON object would be:")
+		fmt.Fprintln(os.Stderr)
+		fmt.Fprintln(os.Stderr, `{"principal":{"authProvider":{"type":"api-token"},"attributes":{"name":["test-token"]}},"scope":{"verb":"view"}}`)
+		fmt.Fprintln(os.Stderr)
+		fmt.Fprintln(os.Stderr, "Please refer to the authorization plugin documentation for information on the shape")
+		fmt.Fprintln(os.Stderr, "of request payloads.")
+		fmt.Fprintln(os.Stderr, "If you want to evaluate the rules against JSON objects stored in a file, use your shell's")
+		fmt.Fprintln(os.Stderr, "input redirection feature (< FILENAME).")
+		fmt.Fprintln(os.Stderr, "============================================")
+	}
+
 	dec := json.NewDecoder(os.Stdin)
 	for {
 		var rawVal map[string]interface{}
-		dec.InputOffset()
 		err := dec.Decode(&rawVal)
 		if err != nil {
 			if err == io.EOF {
