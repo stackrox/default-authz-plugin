@@ -10,6 +10,7 @@ pair, or whether it is a global resource (i.e., attributes will always be empty)
 | --------------------- | --------- |
 | APIToken              | Global    |
 | Alert                 | Namespace |
+| AllComments           | Global    |
 | AuthPlugin            | Global    |
 | AuthProvider          | Global    |
 | BackupPlugins         | Global    |
@@ -18,12 +19,14 @@ pair, or whether it is a global resource (i.e., attributes will always be empty)
 | ComplianceRunSchedule | Global    |
 | ComplianceRuns        | Cluster   |
 | Config                | Global    |
+| CVE                   | Namespace |
 | DebugLogs             | Global    |
 | DebugMetrics          | Global    |
 | Deployment            | Namespace |
 | Detection             | Global    |
 | Group                 | Global    |
 | Image                 | Namespace |
+| ImageComponent        | Namespace |
 | ImageIntegration      | Global    |
 | ImbuedLogs            | Global    |
 | Indicator             | Namespace |
@@ -37,10 +40,14 @@ pair, or whether it is a global resource (i.e., attributes will always be empty)
 | Node                  | Cluster   |
 | Notifier              | Global    |
 | Policy                | Global    |
+| ProbeUpload           | Global    |
 | ProcessWhitelist      | Namespace |
+| Risk                  | Namespace |
 | Role                  | Global    |
+| ScannerBundle         | Global    |
 | ScannerDefinitions    | Global    |
 | Secret                | Namespace |
+| SensorUpgradeConfig   | Global    |
 | ServiceAccount        | Namespace |
 | ServiceIdentity       | Global    |
 | User                  | Global    |
