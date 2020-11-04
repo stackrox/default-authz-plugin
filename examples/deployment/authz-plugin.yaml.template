@@ -65,9 +65,10 @@ spec:
             readOnlyRootFilesystem: true
             capabilities:
               drop: ["ALL"]
-      # Remove the following two lines if deploying the image does not require image pull secrets.
+      # Remove the following three lines if deploying the image does not require image pull secrets.
       imagePullSecrets:
         - name: stackrox
+        - name: stackrox-dockerhub
       volumes:
         - name: config-volume
           configMap:
