@@ -89,8 +89,9 @@ func (h *handler) handleHTTPRequest(r *http.Request) ([]byte, error) {
 		})
 		if err != nil {
 			log.Printf("error marshaling payload: %v", err)
+		} else {
+			log.Println(string(bytes))
 		}
-		log.Println(string(bytes))
 	}
 
 	return respBytes, nil
