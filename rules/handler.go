@@ -21,6 +21,8 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
+	"strings"
 
 	"github.com/stackrox/default-authz-plugin/pkg/httperr"
 	"github.com/stackrox/default-authz-plugin/pkg/payload"
@@ -29,6 +31,11 @@ import (
 // handler wraps a rule engine in a HTTP request handler.
 type handler struct {
 	engine Engine
+}
+
+type logPayload struct {
+	Req  *payload.AuthorizationRequest
+	Resp *payload.AuthorizationResponse
 }
 
 // NewHandler creates and returns an http.Handler that processes authorization requests by dispatching them to the
@@ -74,6 +81,18 @@ func (h *handler) handleHTTPRequest(r *http.Request) ([]byte, error) {
 	if err != nil {
 		return nil, httperr.Newf(http.StatusInternalServerError, "could not marshal authorization response: %v", err)
 	}
+
+	if strings.EqualFold(os.Getenv("LOGLEVEL"), "debug") {
+		bytes, err := json.Marshal(logPayload{
+			Req:  req,
+			Resp: resp,
+		})
+		if err != nil {
+			log.Printf("error marshaling payload: %v", err)
+		}
+		log.Println(string(bytes))
+	}
+
 	return respBytes, nil
 }
 
