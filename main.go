@@ -22,6 +22,8 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
+	"strings"
 
 	"github.com/stackrox/default-authz-plugin/rules"
 	"github.com/stackrox/default-authz-plugin/rules/engines"
@@ -62,7 +64,7 @@ func mainCmd() error {
 	}
 
 	mux := http.NewServeMux()
-	mux.Handle("/authorize", rules.NewHandler(engine))
+	mux.Handle("/authorize", rules.NewHandler(engine, strings.EqualFold(os.Getenv("LOGLEVEL"), "debug")))
 
 	httpServeFunc, err := server.Create(serverCfg, mux)
 	if err != nil {
