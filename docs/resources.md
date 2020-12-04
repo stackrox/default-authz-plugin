@@ -36,6 +36,7 @@ pair, or whether it is a global resource (i.e., attributes will always be empty)
 | Licenses              | Global    |
 | Namespace             | Namespace |
 | NetworkGraph          | Namespace |
+| NetworkGraphConfig    | Global    |
 | NetworkPolicy         | Namespace |
 | Node                  | Cluster   |
 | Notifier              | Global    |
