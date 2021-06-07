@@ -33,4 +33,7 @@ type Principal struct {
 
 	// Attributes are the attributes of the entity.
 	Attributes map[string]interface{} `json:"attributes,omitempty"`
+
+	// Roles list all principals roles names.
+	Roles []string `json:"roles,omitempty"`
 }
