@@ -26,7 +26,8 @@ The request body must be a JSON object of the following form:
     "attributes": {
       // Arbitrary attributes describing a principal (keys are always strings). Dependent on the auth provider.
       // Typically, values are lists of strings.
-    }
+    },
+    "roles" : ... // List of principal roles names.
   },
   "requestedScopes": [
   	// Each JSON object in this array is referred to as an "access scope"
